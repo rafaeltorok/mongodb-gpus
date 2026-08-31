@@ -3,7 +3,7 @@ export default function SearchBar({ searchTerm, setSearchTerm }) {
     <div>
       <input
         id="search-bar"
-        type="text"
+        type="search"
         placeholder="Search..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
