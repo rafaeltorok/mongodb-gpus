@@ -62,20 +62,40 @@ export default function Gpu({ gpu }) {
             <GpuRow header={"CORES"} data={String(gpuData.cores)} />
             <GpuRow header={"TMUs"} data={String(gpuData.tmus)} />
             <GpuRow header={"ROPs"} data={String(gpuData.rops)} />
-            <GpuRow header={"VRAM"} data={`${vramToDisplay} ${gpuData.memtype}`} />
+            <GpuRow
+              header={"VRAM"}
+              data={`${vramToDisplay} ${gpuData.memtype}`}
+            />
             <GpuRow header={"BUS WIDTH"} data={`${String(gpuData.bus)} bit`} />
 
             <GpuDivision title={"CLOCK SPEEDS"} />
-            <GpuRow header={"BASE CLOCK"} data={`${String(gpuData.baseclock)} MHz`} />
+            <GpuRow
+              header={"BASE CLOCK"}
+              data={`${String(gpuData.baseclock)} MHz`}
+            />
             {calculateMode ? (
               <>
-                <EditableRow header={"BOOST CLOCK"} data={editedBoostClock} setData={setEditedBoostClock} />
-                <EditableRow header={"MEMORY CLOCK"} data={editedMemClock} setData={setEditedMemClock} />
+                <EditableRow
+                  header={"BOOST CLOCK"}
+                  data={editedBoostClock}
+                  setData={setEditedBoostClock}
+                />
+                <EditableRow
+                  header={"MEMORY CLOCK"}
+                  data={editedMemClock}
+                  setData={setEditedMemClock}
+                />
               </>
             ) : (
               <>
-                <GpuRow header={"BOOST CLOCK"} data={`${String(gpuData.boostclock)} MHz`} />
-                <GpuRow header={"MEMORY CLOCK"} data={`${String(gpuData.memclock)} Gbps effective`} />
+                <GpuRow
+                  header={"BOOST CLOCK"}
+                  data={`${String(gpuData.boostclock)} MHz`}
+                />
+                <GpuRow
+                  header={"MEMORY CLOCK"}
+                  data={`${String(gpuData.memclock)} Gbps effective`}
+                />
               </>
             )}
 
@@ -91,7 +111,11 @@ export default function Gpu({ gpu }) {
           <div className="table-controls">
             <button
               onClick={() => {
-                setGpuData({ ...gpuData, boostclock: editedBoostClock, memclock: editedMemClock });
+                setGpuData({
+                  ...gpuData,
+                  boostclock: editedBoostClock,
+                  memclock: editedMemClock,
+                });
                 setCalculateMode(false);
               }}
             >
@@ -109,11 +133,7 @@ export default function Gpu({ gpu }) {
           </div>
         ) : (
           <div className="table-controls">
-            <button
-              onClick={() => setCalculateMode(true)}
-            >
-              Calculate
-            </button>
+            <button onClick={() => setCalculateMode(true)}>Calculate</button>
             <button
               onClick={() => {
                 setGpuData(gpu);

@@ -19,7 +19,8 @@ export default function GpuTable({ gpu }) {
   const manufacturerName = getManufacturerClass(gpuData);
 
   // Format the VRAM amount in either GB or MB
-  const vramToDisplay = gpuData.vram < 1 ? `${gpuData.vram * 1000}MB` : `${gpuData.vram}GB`;
+  const vramToDisplay =
+    gpuData.vram < 1 ? `${gpuData.vram * 1000}MB` : `${gpuData.vram}GB`;
 
   // Calculate the theoretical performance
   const performance = calculatePerformance(gpuData);
@@ -46,16 +47,33 @@ export default function GpuTable({ gpu }) {
         <table className={manufacturerName}>
           <DivisionHeader title={"CLOCK SPEEDS"} />
           <tbody>
-            <Row label={"BASE CLOCK"} data={`${String(gpuData.baseclock)} MHz`} />
+            <Row
+              label={"BASE CLOCK"}
+              data={`${String(gpuData.baseclock)} MHz`}
+            />
             {calculateMode ? (
               <>
-                <EditableRow label={"BOOST CLOCK"} data={editedBoostClock} setData={setEditedBoostClock} />
-                <EditableRow label={"MEMORY CLOCK"} data={editedMemClock} setData={setEditedMemClock} />
+                <EditableRow
+                  label={"BOOST CLOCK"}
+                  data={editedBoostClock}
+                  setData={setEditedBoostClock}
+                />
+                <EditableRow
+                  label={"MEMORY CLOCK"}
+                  data={editedMemClock}
+                  setData={setEditedMemClock}
+                />
               </>
             ) : (
               <>
-                <Row label={"BOOST CLOCK"} data={`${String(gpuData.boostclock)} MHz`} />
-                <Row label={"MEMORY CLOCK"} data={`${String(gpuData.memclock)} Gbps effective`} />
+                <Row
+                  label={"BOOST CLOCK"}
+                  data={`${String(gpuData.boostclock)} MHz`}
+                />
+                <Row
+                  label={"MEMORY CLOCK"}
+                  data={`${String(gpuData.memclock)} Gbps effective`}
+                />
               </>
             )}
           </tbody>
@@ -76,7 +94,11 @@ export default function GpuTable({ gpu }) {
         <button
           className="calculate-button"
           onClick={() => {
-            setGpuData({ ...gpuData, boostclock: editedBoostClock, memclock: editedMemClock });
+            setGpuData({
+              ...gpuData,
+              boostclock: editedBoostClock,
+              memclock: editedMemClock,
+            });
             setCalculateMode(false);
           }}
         >
@@ -85,7 +107,9 @@ export default function GpuTable({ gpu }) {
       ) : (
         <button
           className="calculate-button"
-          onClick={() => { setCalculateMode(true) }}
+          onClick={() => {
+            setCalculateMode(true);
+          }}
         >
           Calculate performance
         </button>
@@ -96,8 +120,8 @@ export default function GpuTable({ gpu }) {
           <button
             className="cancel-button"
             onClick={() => {
-              setEditedBoostClock(gpuData.boostclock)
-              setEditedMemClock(gpuData.memclock)
+              setEditedBoostClock(gpuData.boostclock);
+              setEditedMemClock(gpuData.memclock);
               setCalculateMode(false);
             }}
           >
@@ -109,9 +133,9 @@ export default function GpuTable({ gpu }) {
           <button
             className="reset-button"
             onClick={() => {
-              setGpuData({ ...gpu })
-              setEditedBoostClock(gpu.boostclock)
-              setEditedMemClock(gpu.memclock)
+              setGpuData({ ...gpu });
+              setEditedBoostClock(gpu.boostclock);
+              setEditedMemClock(gpu.memclock);
               setCalculateMode(false);
             }}
           >

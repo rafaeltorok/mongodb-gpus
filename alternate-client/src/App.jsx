@@ -23,16 +23,12 @@ function App() {
   return (
     <>
       <h1 id="title-header">MongoDB GPUs</h1>
-      <SearchBar
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
-      {data
-        .gpus
-        .filter(gpu => filterGpu(gpu))
+      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      {data.gpus
+        .filter((gpu) => filterGpu(gpu))
         .map((gpu) => {
-        return <Gpu key={gpu._id} gpu={gpu} />;
-      })}
+          return <Gpu key={gpu._id} gpu={gpu} />;
+        })}
     </>
   );
 }
