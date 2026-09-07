@@ -6,7 +6,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 
 const client = new ApolloClient({
-  uri: import.meta.env.VITE_BACKEND_URL || "/graphql",
+  uri: "/graphql",
   cache: new InMemoryCache(),
 });
 
