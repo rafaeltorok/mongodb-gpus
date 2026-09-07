@@ -1,5 +1,26 @@
 import calculatePerformance from "../utils/calculatePerformance";
 
+function renderRow(label, data) {
+  return (
+    <tr>
+      <th>{label}</th>
+      <td>{data}</td>
+    </tr>
+  );
+}
+
+function renderDivisionHeader(title) {
+  return (
+    <thead>
+      <tr>
+        <th className="table-header" colSpan={2}>
+          {title}
+        </th>
+      </tr>
+    </thead>
+  );
+}
+
 function Gpu({ gpu }) {
   const manufacturerName =
     gpu.manufacturer.toLowerCase() === "nvidia"
@@ -28,88 +49,32 @@ function Gpu({ gpu }) {
       </div>
       <div className="tables">
         <table className={manufacturerName}>
-          <thead>
-            <tr>
-              <th className="table-header" colSpan={2}>
-                SPECIFICATIONS
-              </th>
-            </tr>
-          </thead>
+          {renderDivisionHeader("SPECIFICATIONS")}
           <tbody>
-            <tr>
-              <th>CORES</th>
-              <td>{gpu.cores}</td>
-            </tr>
-            <tr>
-              <th>TMUs</th>
-              <td>{gpu.tmus}</td>
-            </tr>
-            <tr>
-              <th>ROPs</th>
-              <td>{gpu.rops}</td>
-            </tr>
-            <tr>
-              <th>VRAM</th>
-              <td>
-                {vramToDisplay} {gpu.memtype}
-              </td>
-            </tr>
-            <tr>
-              <th>BUS WIDTH</th>
-              <td>{gpu.bus} bit</td>
-            </tr>
+            {renderRow("CORES", String(gpu.cores))}
+            {renderRow("TMUs", String(gpu.tmus))}
+            {renderRow("ROPs", String(gpu.rops))}
+            {renderRow("VRAM", `${vramToDisplay} ${gpu.memtype}`)}
+            {renderRow("BUS WIDTH", `${gpu.bus} bit`)}
           </tbody>
         </table>
 
         <table className={manufacturerName}>
-          <thead>
-            <tr>
-              <th className="table-header" colSpan={2}>
-                CLOCK SPEEDS
-              </th>
-            </tr>
-          </thead>
+          {renderDivisionHeader("CLOCK SPEEDS")}
           <tbody>
-            <tr>
-              <th>BASE CLOCK</th>
-              <td>{gpu.baseclock} MHz</td>
-            </tr>
-            <tr>
-              <th>BOOST CLOCK</th>
-              <td>{gpu.boostclock} MHz</td>
-            </tr>
-            <tr>
-              <th>MEMORY CLOCK</th>
-              <td>{gpu.memclock} Gbps effective</td>
-            </tr>
+            {renderRow("BASE CLOCK", `${gpu.baseclock} MHz`)}
+            {renderRow("BOOST CLOCK", `${gpu.boostclock} MHz`)}
+            {renderRow("MEMORY CLOCK", `${gpu.memclock} Gbps effective`)}
           </tbody>
         </table>
 
         <table className={manufacturerName}>
-          <thead>
-            <tr>
-              <th className="table-header" colSpan={2}>
-                THEORETICAL PERFORMANCE
-              </th>
-            </tr>
-          </thead>
+          {renderDivisionHeader("THEORETICAL PERFORMANCE")}
           <tbody>
-            <tr>
-              <th>FP32(float)</th>
-              <td>{performance[0]}</td>
-            </tr>
-            <tr>
-              <th>TEXTURE RATE</th>
-              <td>{performance[1]}</td>
-            </tr>
-            <tr>
-              <th>PIXEL RATE</th>
-              <td>{performance[2]}</td>
-            </tr>
-            <tr>
-              <th>BANDWIDTH</th>
-              <td>{performance[3]}</td>
-            </tr>
+            {renderRow("FP32(float)", performance[0])}
+            {renderRow("TEXTURE RATE", performance[1])}
+            {renderRow("PIXEL RATE", performance[2])}
+            {renderRow("BANDWIDTH", performance[3])}
           </tbody>
         </table>
       </div>
