@@ -6,8 +6,15 @@ export default function EditableRow({ label, data, setData }) {
         <input
           className="edit-mode-input-field"
           value={data}
-          type="number"
-          onChange={(e) => setData(Number(e.target.value))}
+          type="text"
+          onChange={(e) => {
+            const val = Number(e.target.value);
+            if (val <= 0 || isNaN(val)) {
+              setData(1);
+            } else {
+              setData(val);
+            }
+          }}
         />
       </td>
     </tr>
