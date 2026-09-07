@@ -1,3 +1,7 @@
+// React
+import { useState } from "react";
+
+// Material UI
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,10 +16,21 @@ import getManufacturerClass from "../utils/getManufacturerClass";
 // Components
 import GpuRow from "./GpuRow";
 import GpuDivision from "./GpuDivision";
+import EditableRow from "./EditableRow";
 
 export default function Gpu({ gpu }) {
-  const performance = calculatePerformance(gpu);
+  const [calculateMode, setCalculateMode] = useState(false);
+  const [gpuData, setGpuData] = useState(gpu);
+  const [editedBoostClock, setEditedBoostClock] = useState(gpu.boostclock);
+  const [editedMemClock, setEditedMemClock] = useState(gpu.memclock);
+
+  // Calculate the theoretical performance
+  const performance = calculatePerformance(gpuData);
+
+  // Get the manufacturer name to match the class with the manufacturer's color scheme
   const manufacturerName = getManufacturerClass(gpu);
+
+  // Format the VRAM amount in either MB or GB
   const vramToDisplay = gpu.vram < 1 ? `${gpu.vram * 1000}MB` : `${gpu.vram}GB`;
 
   return (
@@ -38,22 +53,31 @@ export default function Gpu({ gpu }) {
                   padding: "1rem",
                 }}
               >
-                {gpu.manufacturer} {gpu.gpuline} {gpu.model}
+                {gpuData.manufacturer} {gpuData.gpuline} {gpuData.model}
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             <GpuDivision title={"SPECIFICATIONS"} />
-            <GpuRow header={"CORES"} data={String(gpu.cores)} />
-            <GpuRow header={"TMUs"} data={String(gpu.tmus)} />
-            <GpuRow header={"ROPs"} data={String(gpu.rops)} />
-            <GpuRow header={"VRAM"} data={`${vramToDisplay} ${gpu.memtype}`} />
-            <GpuRow header={"BUS WIDTH"} data={`${String(gpu.bus)} bit`} />
+            <GpuRow header={"CORES"} data={String(gpuData.cores)} />
+            <GpuRow header={"TMUs"} data={String(gpuData.tmus)} />
+            <GpuRow header={"ROPs"} data={String(gpuData.rops)} />
+            <GpuRow header={"VRAM"} data={`${vramToDisplay} ${gpuData.memtype}`} />
+            <GpuRow header={"BUS WIDTH"} data={`${String(gpuData.bus)} bit`} />
 
             <GpuDivision title={"CLOCK SPEEDS"} />
-            <GpuRow header={"BASE CLOCK"} data={`${String(gpu.baseclock)} MHz`} />
-            <GpuRow header={"BOOST CLOCK"} data={`${String(gpu.boostclock)} MHz`} />
-            <GpuRow header={"MEMORY CLOCK"} data={`${String(gpu.memclock)} Gbps effective`} />
+            <GpuRow header={"BASE CLOCK"} data={`${String(gpuData.baseclock)} MHz`} />
+            {calculateMode ? (
+              <>
+                <EditableRow header={"BOOST CLOCK"} data={editedBoostClock} setData={setEditedBoostClock} />
+                <EditableRow header={"MEMORY CLOCK"} data={editedMemClock} setData={setEditedMemClock} />
+              </>
+            ) : (
+              <>
+                <GpuRow header={"BOOST CLOCK"} data={`${String(gpuData.boostclock)} MHz`} />
+                <GpuRow header={"MEMORY CLOCK"} data={`${String(gpuData.memclock)} Gbps effective`} />
+              </>
+            )}
 
             <GpuDivision title={"THEORETICAL PERFORMANCE"} />
             <GpuRow header={"FP32(float)"} data={performance[0]} />
@@ -62,6 +86,46 @@ export default function Gpu({ gpu }) {
             <GpuRow header={"BANDWIDTH"} data={performance[3]} />
           </TableBody>
         </Table>
+
+        {calculateMode ? (
+          <div className="table-controls">
+            <button
+              onClick={() => {
+                setGpuData({ ...gpuData, boostclock: editedBoostClock, memclock: editedMemClock });
+                setCalculateMode(false);
+              }}
+            >
+              Confirm
+            </button>
+            <button
+              onClick={() => {
+                setEditedBoostClock(gpuData.boostclock);
+                setEditedMemClock(gpuData.memclock);
+                setCalculateMode(false);
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <div className="table-controls">
+            <button
+              onClick={() => setCalculateMode(true)}
+            >
+              Calculate
+            </button>
+            <button
+              onClick={() => {
+                setGpuData(gpu);
+                setEditedBoostClock(gpu.boostclock);
+                setEditedMemClock(gpu.memclock);
+                setCalculateMode(false);
+              }}
+            >
+              Reset
+            </button>
+          </div>
+        )}
       </TableContainer>
     </div>
   );
