@@ -5,9 +5,15 @@ services:
     env_file:
       - ./server/.env
     expose:
-      - "4000"
+      - 4000
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   nginx:
     build:
@@ -17,11 +23,17 @@ services:
         - VITE_BACKEND_URL=/graphql
     container_name: mongodb-gpus-nginx
     ports:
-      - "8000:80"
+      - 8000:80
     depends_on:
       - server
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
 networks:
   app-network:

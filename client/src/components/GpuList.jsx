@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import Gpu from "./Gpu";
+import GpuTable from "./GpuTable/GpuTable";
 import GpuContext from "../GpuContext";
 
 export default function GpuList() {
@@ -19,7 +19,7 @@ export default function GpuList() {
             checkTerm(gpu.model),
         )
         .map((gpu) => {
-          return <Gpu gpu={gpu} key={gpu._id} />;
+          return <GpuTable gpu={gpu} key={gpu._id} />;
         })}
     </div>
   );
