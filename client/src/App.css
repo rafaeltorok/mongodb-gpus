@@ -78,22 +78,6 @@ table {
   table-layout: fixed;
 }
 
-table:first-child {
-  border-bottom-left-radius: 1rem;
-}
-
-table:first-child tbody tr:last-child th {
-  border-bottom-left-radius: 1rem;
-}
-
-table:last-child {
-  border-bottom-right-radius: 1rem;
-}
-
-table:last-child tbody tr:last-child td {
-  border-bottom-right-radius: 1rem;
-}
-
 th,
 td {
   border: 2px solid #303030;
@@ -140,6 +124,42 @@ td {
   color: #0068b5;
 }
 
+button {
+  width: 100%;
+  background-color: black;
+  border-color: black;
+  border-style: groove;
+  padding: 0.5rem;
+  font: inherit;
+  font-size: 0.75rem;
+  color: #909090;
+}
+
+button:hover {
+  background-color: #151515;
+}
+
+button:active {
+  background-color: #303030;
+  color: #151515;
+}
+
+.reset-button,
+.cancel-button {
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.edit-mode-input-field {
+  width: 90%;
+  height: 100%;
+  margin: 0;
+  padding-left: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font: inherit;
+}
+
 @media only screen and (hover: none) and (pointer: coarse) and (max-width: 700px) {
   .container {
     max-width: 450px;
@@ -154,35 +174,11 @@ td {
     max-width: 100%;
     margin-bottom: 0;
   }
-
-  table:first-child {
-    border-bottom-left-radius: 0;
-  }
-
-  table:first-child tbody tr:last-child th {
-    border-bottom-left-radius: 0;
-  }
-
-  table:last-child {
-    border-bottom-left-radius: 1rem;
-    border-bottom-right-radius: 1rem;
-  }
-
-  table:last-child tbody tr:last-child th {
-    border-bottom-left-radius: 1rem;
-  }
-
-  table:last-child tbody tr:last-child td {
-    border-bottom-right-radius: 1rem;
-  }
 }
 
 @media only screen and (orientation: landscape) {
   th,
   td {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding: 0.5rem;
   }
 }
