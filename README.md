@@ -4,86 +4,143 @@
 - [About](#about)
 - [Docker](#docker)
 - [Static build](#static-build)
-- [Accessing the web app](#accessing-the-web-app)
-- [CRUD operations](#crud-operations)
+- [GraphQL operations](#graphql-operations)
 
 
 ## About
-A Node.js + Express + Apollo GraphQL backend that serves a built React frontend and connects to MongoDB Atlas using environment variables. The Docker image was pushed to a public Docker Hub repository and deployed as a single Web Service on Render. The Render deployment is triggered automatically on GitHub push.
 
-**Render Web Service link:** https://mongodb-gpus.onrender.com
+Node.js + Express + Apollo GraphQL app, to display a list of graphics cards and calculate their theoretical performance.
+
+[Live demo on Render↗](https://mongodb-gpus.onrender.com)
+
+### Screenshots
+
+**Standard frontend**
+
+<img src="./resources/img/mongodb-gpus-frontend.png" alt="MongoDB GPUs web UI" width="500"/>
+
+**Alternative frontend (built with Material UI)**
+
+<img src="./resources/img/mongodb-gpus-material-ui.png" alt="MongoDB GPUs alternative UI" width="400"/>
 
 
 ## Docker
+
 ### Docker Compose
-Development build
-```
-docker compose -f ./docker-compose.dev.yml up -d
-```
 
-- The development build uses a containerized Mongo database for testing, preventing it from affecting the main MongoDB database from the cloud server.
+#### Development build (supports hot reloading)
 
-- This build also supports hot reloading for the client, alt-client and server.
+**Note**: the Docker **dev compose orchestration** uses the local Node dependencies in order to run the containers.
 
-Production build
-```
-docker compose up -d
-```
+- Install dependencies
+	```bash
+	# Alternate client
+	cd ./alternate-client && npm install
 
-### Using separate Docker containers
+	# Main client
+	cd ./client && npm install
+
+	# Server
+	cd ./server && npm install
+	```
+
+- Start the orchestration
+	```bash
+	docker compose -f ./docker-compose.dev.yml up -d
+	```
+
+	- The development build uses a containerized Mongo database for testing, preventing it from affecting the main Mongo database from the cloud server.
+
+- Access the app on:
+
+	- Apollo Sandbox: http://localhost:4000/graphql
+  
+	- Standard frontend: http://localhost:5173
+  
+	- Alternative frontend: http://localhost:5174
+
+#### Production build
+
+**Note**: this server container connects to the cloud Mongo database.
+	
+- Start the orchestration
+	```bash
+	docker compose up -d
+	```
+
+- Access the app on:
+
+	- Apollo Sandbox: http://localhost:8000/graphql
+
+	- Standard frontend: http://localhost:8000
+		
+	- Alternative frontend: http://localhost:8000/alt
+
+### Individual Docker containers
+
 1. Create a custom network on Docker
-    ```
+    ```bash
     docker network create mongodb-gpus-network
     ```
 
-2. Build the images for both clients, or only the one you choose
-    ```
+2. Build the images for both clients
+    ```bash
     cd ./client && docker build -t mongodb-gpus-client .
     cd ./alternate-client && docker build -t mongodb-gpus-alt-client .
     ```
 
-3. Build an image to the server
-    ```
+3. Build the server image
+    ```bash
     docker build -t mongodb-gpus-server .
     ```
 
-4. Create a mongo container to store the data locally (this container must be started before the server container)
-    ```
+4. Create a mongo container to store the data locally
+    ```bash
     docker run -d --name mongo --network mongodb-gpus-network mongo
     ```
 
 5. Alternative client
-    ```
+    ```bash
     docker run -d --name mongodb-gpus-alt-client --network mongodb-gpus-network -p 5174:80 mongodb-gpus-alt-client
     ```
     
 6. Main client
-    ```
+    ```bash
     docker run -d --name mongodb-gpus-client --network mongodb-gpus-network -p 5173:80 mongodb-gpus-client
     ```
 
 7. Server (development version)
-    ```
+    ```bash
     docker run -d --name mongodb-gpus-server --network mongodb-gpus-network -p 3001:4000 -e <mongodb_env_variable> mongodb-gpus-server
     ```
 
-**Optional**: You can run the production build of the frontend and use the server container to serve the static build, this way only the server container will be necessary.
+8. Access the app on
 
-1. Build the client
-    ```
-    cd ./client && npm run build && cp -r ./dist ../server
+	- Apollo Sandbox: http://localhost:3001/graphql
+
+	- Standard frontend: http://localhost:5173
+		
+	- Alternative frontend: http://localhost:5174/alt
+
+### Server static build
+
+The server supports serving the static builds for both clients. To run the server in production mode:
+
+1. Build the clients
+    ```bash
+    cd ./client && npm run build && cp -r ./dist ../server/client
+		cd ./alternate-client && npm run build && cp -r ./dist ../server/alt-client
     ```
 
 2. Start the server container
-    ```
+    ```bash
     docker run -d --name mongodb-gpus -p 4000:4000 -e "MONGODB_URI=<mongodb_env_variable>" mongodb-gpus-server
     ```
 
 
 ## Static build
-To run the static build outside of Docker, follow these steps:
 
-1. Build the client you wish to test
+1. Build the client you wish to test (or both)
 		```bash
 		# Main client
 		cd ./client && npm run build
@@ -94,7 +151,11 @@ To run the static build outside of Docker, follow these steps:
 
 2. Copy the static build to the main server folder
 		```bash
-		cp -r ./dist ../server
+		# Main client
+		cp -r ./dist ../server/client
+
+		# Alternate client
+		cp -r ./dist ../server/alt-client
 		```
 
 3. Run the server in production mode
@@ -102,42 +163,15 @@ To run the static build outside of Docker, follow these steps:
 		cd ./server && npm install && npm run start
 		```
 
-
-
-## Accessing the web app
-#### Standard frontend
-<img src="./resources/img/mongodb-gpus-frontend.png" alt="MongoDB GPUs web UI" width="500"/>
-
-#### Alternative frontend (built with Material UI)
-<img src="./resources/img/mongodb-gpus-material-ui.png" alt="MongoDB GPUs alternative UI" width="400"/>
-
-### Docker
-#### In development mode
-- Apollo Sandbox: http://localhost:4000/graphql
+4. Access the app on:
+	
+	- Apollo Sandbox: http://localhost:4000/graphql
   
-- Standard frontend: http://localhost:5173
-  
-- Alternative frontend: http://localhost:5174
+	- Web UI: http://localhost:4000
 
 
-#### In production mode
-- Apollo Sandbox: http://localhost:8000/graphql
+## GraphQL operations
 
-- The server must always redirect to `/graphql` for Nginx to work as a reverse proxy.
-
-- Standard frontend: http://localhost:8000
-  
-- Alternative frontend: http://localhost:8000/alt
-
-
-### Static build
-- Apollo Sandbox: http://localhost:4000/graphql
-  
-- Web UI: http://localhost:4000
-
-
-
-## CRUD operations
 - Get all available data
 	```gql
 	query allGpus {
