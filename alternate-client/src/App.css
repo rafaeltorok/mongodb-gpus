@@ -5,6 +5,14 @@
   text-align: center;
   font-family: "digital-dreamers", "sans-serif";
   font-size: 0.8rem;
+
+  @media only screen and (hover: none) and (pointer: coarse) and (orientation: landscape) {
+    width: 550px;
+  }
+
+  @media only screen and (hover: none) and (pointer: coarse) {
+    padding: 1rem;
+  }
 }
 
 @font-face {
@@ -45,23 +53,18 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 1rem;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.85
-  ); /* Optional: dark background for contrast */
+  background-color: rgba(0, 0, 0, 0.85); /* Optional: dark background for contrast */
+
+  @media only screen and (hover: none) and (pointer: coarse) {
+    max-width: 90%; /* Ensures labels take full width */
+    margin-bottom: 2rem;
+  }
 }
 
 .gpu-table td,
 .gpu-table th {
   color: white;
-  border-color: rgba(
-    68,
-    68,
-    68,
-    0.25
-  ); /* Optional: adjust border for dark mode */
+  border-color: rgba(68, 68, 68, 0.25); /* Optional: adjust border for dark mode */
 }
 
 .main-table-header {
@@ -91,8 +94,9 @@
 .edit-input-field {
   font: inherit;
   width: 75%;
-  padding: 0.5rem;
+  padding: 0.25rem;
   margin: 0;
+  box-sizing: border-box;
 }
 
 button {
@@ -125,21 +129,4 @@ button:active {
 .intel thead th,
 .intel td {
   color: #0068b5;
-}
-
-@media only screen and (hover: none) and (pointer: coarse) {
-  #root {
-    padding: 1rem;
-  }
-
-  .gpu-table {
-    max-width: 90%; /* Ensures labels take full width */
-    margin-bottom: 2rem;
-  }
-}
-
-@media only screen and (hover: none) and (pointer: coarse) and (orientation: landscape) {
-  #root {
-    width: 550px;
-  }
 }

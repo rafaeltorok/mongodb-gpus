@@ -22,6 +22,10 @@
   border-top-right-radius: 1rem;
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
+
+  @media only screen and (hover: none) and (pointer: coarse) and (max-width: 700px) {
+    max-width: 450px;
+  }
 }
 
 #title-header {
@@ -53,6 +57,11 @@
   display: flex;
   justify-content: center;
   gap: 0; /* Space between tables */
+
+  @media only screen and (hover: none) and (pointer: coarse) and (max-width: 700px) {
+    flex-direction: column;
+    max-width: 100%;
+  }
 }
 
 .table-main-header {
@@ -76,15 +85,17 @@ table {
   max-width: 100%;
   border: 3px solid #303030;
   table-layout: fixed;
+
+  @media only screen and (hover: none) and (pointer: coarse) and (max-width: 700px) {
+    max-width: 100%;
+    margin-bottom: 0;
+  }
 }
 
 th,
 td {
   border: 2px solid #303030;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.6rem;
-  padding-bottom: 0.6rem;
+  padding: 0.75rem;
 }
 
 th {
@@ -151,34 +162,8 @@ button:active {
 }
 
 .edit-mode-input-field {
-  width: 90%;
-  height: 100%;
-  margin: 0;
-  padding-left: 0.5rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  width: 80%;
+  max-width: 150px;
+  padding: 0.25rem;
   font: inherit;
-}
-
-@media only screen and (hover: none) and (pointer: coarse) and (max-width: 700px) {
-  .container {
-    max-width: 450px;
-  }
-
-  .tables {
-    flex-direction: column;
-    max-width: 100%;
-  }
-
-  table {
-    max-width: 100%;
-    margin-bottom: 0;
-  }
-}
-
-@media only screen and (orientation: landscape) {
-  th,
-  td {
-    padding: 0.5rem;
-  }
 }
